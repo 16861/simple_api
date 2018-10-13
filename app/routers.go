@@ -8,12 +8,14 @@ import (
 	"projects/simple_api/app/db"
 )
 
+//contains path method and func
 type Route struct {
 	Path   string
 	Method string
 	Fn     HTTPFunc
 }
 
+//array for routers
 type Routes []Route
 
 func getDB() *db.DB {
@@ -26,11 +28,13 @@ func getDB() *db.DB {
 	}
 }
 
+//Root func
 func Root(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-type", "Application/json")
 	w.Write([]byte(`{"status": "ok"}`))
 }
 
+//Get pictures from mongo db
 func GetPictures(w http.ResponseWriter, r *http.Request) {
 	db := getDB()
 	paintings := db.GetPantings()
