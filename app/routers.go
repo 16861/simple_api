@@ -8,18 +8,19 @@ import (
 	"projects/simple_api/app/db"
 )
 
-//contains path method and func
+//Route contains path method and func
 type Route struct {
 	Path   string
 	Method string
 	Fn     HTTPFunc
 }
 
+//RespStatus contains return status, default is OK
 type RespStatus struct {
 	Status string `json:"status"`
 }
 
-//array for routers
+//Routes isarray for routers
 type Routes []Route
 
 func getDB() *db.DB {
@@ -44,7 +45,7 @@ func Root(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-//Get pictures from mongo db
+//GetPictures returns pictures from mongo db
 func GetPictures(w http.ResponseWriter, r *http.Request) {
 	db := getDB()
 	paintings := db.GetPantings()
@@ -59,6 +60,7 @@ func GetPictures(w http.ResponseWriter, r *http.Request) {
 	w.Write(payload)
 }
 
+//AddPainting add new painting to db
 func AddPainting(w http.ResponseWriter, r *http.Request) {
 	data, err := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
@@ -85,6 +87,7 @@ func AddPainting(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+//GetRoutes returns all possible routes
 func GetRoutes() Routes {
 	routers := Routes{}
 

@@ -10,11 +10,13 @@ import (
 	"time"
 )
 
+//App is struct for handling main app logic, storing controller and http server
 type App struct {
 	Controller Controller
 	srv        http.Server
 }
 
+//Run is running main app
 func (a *App) Run(addr, port string) {
 	a.Controller = Controller{}
 
@@ -54,6 +56,7 @@ func (a *App) Run(addr, port string) {
 	os.Exit(0)
 }
 
+//Shutdown app
 func (a *App) Shutdown() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
 	a.srv.Shutdown(ctx)

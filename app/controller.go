@@ -11,10 +11,10 @@ type Controller struct {
 	Router *mux.Router
 }
 
-//type for standart http func
+//HTTPFunc type for standart http func
 type HTTPFunc func(w http.ResponseWriter, r *http.Request)
 
-//add route to router
+//AddRoute add route to router
 func (c *Controller) AddRoute(path, method string, fn HTTPFunc) {
 	if c.Router == nil {
 		c.Router = mux.NewRouter()
