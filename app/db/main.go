@@ -6,16 +6,19 @@ import (
 	mgo "gopkg.in/mgo.v2"
 )
 
+//Painting stores name of workpiece and author name
 type Painting struct {
 	Name   string `bson:"Name"`
 	Author string `bson:"Author"`
 }
 
+//ColectionOfPaintings is collecion of paintings and its name
 type ColectionOfPaintings struct {
 	Name      string     `bson:"Name"`
 	Paintings []Painting `bson:"Paintings"`
 }
 
+//DB credentials
 type DB struct {
 	User           string
 	Password       string
@@ -39,6 +42,7 @@ func (d *DB) getConnection() *mgo.Session {
 	return nil
 }
 
+//GetPantings returns pointer to collection of paintings struct
 func (d *DB) GetPantings() *ColectionOfPaintings {
 	c := d.getConnection()
 	defer c.Close()
@@ -57,6 +61,7 @@ func (d *DB) GetPantings() *ColectionOfPaintings {
 
 }
 
+//AddPainting add new paintings to db
 func (d *DB) AddPainting(p Painting) error {
 	c := d.getConnection()
 	defer c.Close()
