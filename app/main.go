@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"time"
 )
 
@@ -20,6 +21,10 @@ func (a *App) Run(addr, port string) {
 	routers := GetRoutes()
 	for _, route := range routers {
 		a.Controller.AddRoute(route.Path, route.Method, route.Fn)
+	}
+
+	if strings.HasPrefix(addr, "http://") {
+		addr = strings.TrimLeft(addr, "http://")
 	}
 
 	a.srv = http.Server{

@@ -4,14 +4,20 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"projects/simple_api/app"
 	"projects/simple_api/app/db"
 	"testing"
 )
 
 func TestRootApp(t *testing.T) {
+	addr := os.Getenv("API_ADDR")
+	port := os.Getenv("API_PORT")
+	if addr == "" || port == "" {
+		t.Fatal("API_PORT or API_ADDR not set!")
+	}
 
-	response, err := http.Get("http://localhost:8081/")
+	response, err := http.Get(addr + ":" + port)
 	if err != nil {
 		t.Error("When get root, err: ", err)
 	}
@@ -33,7 +39,13 @@ func TestRootApp(t *testing.T) {
 }
 
 func TestGetPaintingsApp(t *testing.T) {
-	response, err := http.Get("http://localhost:8081/paintings")
+	addr := os.Getenv("API_ADDR")
+	port := os.Getenv("API_PORT")
+	if addr == "" || port == "" {
+		t.Fatal("API_PORT or API_ADDR not set!")
+	}
+
+	response, err := http.Get(addr + ":" + port + "/paintings")
 	if err != nil {
 		t.Error("When get root, err: ", err)
 	}
