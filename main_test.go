@@ -29,6 +29,7 @@ func TestRootApp(t *testing.T) {
 	}
 	err = json.Unmarshal(dt, &resp)
 	if err != nil {
+		t.Log("Struct: ", string(dt))
 		t.Error("when read unmarshal response body, err: ", err)
 	}
 
