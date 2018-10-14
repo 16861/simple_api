@@ -15,6 +15,10 @@ type Route struct {
 	Fn     HTTPFunc
 }
 
+type RespStatus struct {
+	Status string `json:"status"`
+}
+
 //array for routers
 type Routes []Route
 
@@ -31,7 +35,13 @@ func getDB() *db.DB {
 //Root func
 func Root(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-type", "Application/json")
-	w.Write([]byte(`{"status": "ok"}`))
+	data, err := json.Marshal(RespStatus{"OK"})
+	if err != nil {
+		log.Println("error when unmarshal status struct, err: ", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Write(data)
 }
 
 //Get pictures from mongo db

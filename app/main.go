@@ -11,9 +11,10 @@ import (
 
 type App struct {
 	Controller Controller
+	srv        http.Server
 }
 
-func (a *App) Run() {
+func (a *App) Run(addr, port string) {
 	a.Controller = Controller{}
 
 	routers := GetRoutes()
@@ -21,8 +22,8 @@ func (a *App) Run() {
 		a.Controller.AddRoute(route.Path, route.Method, route.Fn)
 	}
 
-	srv := http.Server{
-		Addr:         "127.0.0.1:8081",
+	a.srv = http.Server{
+		Addr:         addr + ":" + port,
 		WriteTimeout: time.Second * 15,
 		ReadTimeout:  time.Second * 15,
 		IdleTimeout:  time.Second * 60,
@@ -30,7 +31,7 @@ func (a *App) Run() {
 	}
 
 	go func() {
-		err := srv.ListenAndServe()
+		err := a.srv.ListenAndServe()
 		if err != nil {
 			log.Fatalln("cannot start server, err: ", err)
 		}
@@ -41,7 +42,16 @@ func (a *App) Run() {
 
 	<-c
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
-	srv.Shutdown(ctx)
+	a.srv.Shutdown(ctx)
+	defer cancel()
+
+	log.Println("shutting down")
+	os.Exit(0)
+}
+
+func (a *App) Shutdown() {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
+	a.srv.Shutdown(ctx)
 	defer cancel()
 
 	log.Println("shutting down")
